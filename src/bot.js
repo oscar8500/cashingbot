@@ -91,16 +91,16 @@ function count(session) {
 
 function donate(session) {
     // request $1 USD at current exchange rates
-    Fiat.fetch().then((toEth) = > {
+    Fiat.fetch().then((toEth) => {
         session.requestEth(toEth.USD(2))
-})
+    })
 }
 
 function help(session) {
     // request $1 USD at current exchange rates
-    Fiat.fetch().then((toEth) = > {
+    Fiat.fetch().then((toEth) => {
         session.requestEth(toEth.USD(20))
-})
+    })
 }
 // HELPERS
 

@@ -5,4 +5,5 @@
 state
 node_modules
 docker-compose.yml
+docker-compose.yml.sample
 .idea
