@@ -79,11 +79,11 @@ class PSQLStore {
     }
 
     _execute(query, args, cb) {
-        this.pgPool.connect((err, client, done) = > {
+        this.pgPool.connect((err, client, done) => {
             if (err) {
                 return cb(err)
             }
-            client.query(query, args, (err, result) = > {
+            client.query(query, args, (err, result) => {
             done(err);
         if (err) {
             return cb(err)
@@ -95,8 +95,8 @@ class PSQLStore {
 
 
     loadBotSession(address) {
-        return new Promise((fulfill, reject) = > {
-                this._execute("SELECT * from bot_sessions WHERE eth_address = $1", [address], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this._execute("SELECT * from bot_sessions WHERE eth_address = $1", [address], (err, result) => {
                 if (err) {
                     console.log(err)
                 }
@@ -123,8 +123,8 @@ class PSQLStore {
                  VALUES ($1, $2)
                  ON CONFLICT (eth_address) DO UPDATE
                  SET data = $2`;
-        return new Promise((fulfill, reject) = > {
-                this._execute(query, [address, data], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this._execute(query, [address, data], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(erro);
@@ -138,8 +138,8 @@ class PSQLStore {
     }
 
     removeBotSession(address) {
-        return new Promise((fulfill, reject) = > {
-                this._execute("DELETE from bot_sessions WHERE eth_address = $1", [address], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this._execute("DELETE from bot_sessions WHERE eth_address = $1", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(erro);
@@ -164,8 +164,8 @@ class PSQLStore {
                  VALUES ($1, $2, $3)
                  ON CONFLICT (key) DO UPDATE
                  SET value = $2, type = $3`;
-        return new Promise((fulfill, reject) = > {
-                this._execute(query, [key, value, type], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this._execute(query, [key, value, type], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -179,8 +179,8 @@ class PSQLStore {
     }
 
     getKey(key) {
-        return new Promise((fulfill, reject) = > {
-                this._execute("SELECT * FROM key_value_store WHERE key = $1", [key], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this._execute("SELECT * FROM key_value_store WHERE key = $1", [key], (err, result) => {
                 if (err) {
                     console.log(err);
                 }
@@ -238,8 +238,8 @@ class SqliteStore {
     }
 
     loadBotSession(address) {
-        return new Promise((fulfill, reject) = > {
-                this.db.get("SELECT * from bot_sessions WHERE eth_address = ?", [address], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this.db.get("SELECT * from bot_sessions WHERE eth_address = ?", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                 }
@@ -264,15 +264,15 @@ class SqliteStore {
 
     updateBotSession(address, data) {
         data = JSON.stringify(data);
-        return new Promise((fulfill, reject) = > {
-                this.db.get("SELECT 1 FROM bot_sessions WHERE eth_address = ?", [address], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this.db.get("SELECT 1 FROM bot_sessions WHERE eth_address = ?", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
                 }
                 else if (result) {
                     // update
-                    this.db.run("UPDATE bot_sessions SET data = ? WHERE eth_address = ?", [data, address], (err, result) = > {
+                    this.db.run("UPDATE bot_sessions SET data = ? WHERE eth_address = ?", [data, address], (err, result) => {
                         if (err) {
                             console.log(err);
                             reject(err);
@@ -283,7 +283,7 @@ class SqliteStore {
                     ;
                 } else {
                     // insert
-                    this.db.run("INSERT INTO bot_sessions (eth_address, data) VALUES (?, ?)", [address, data], (err, result) = > {
+                    this.db.run("INSERT INTO bot_sessions (eth_address, data) VALUES (?, ?)", [address, data], (err, result) => {
                     if (err) {
                         console.log(err);
                     }
@@ -299,8 +299,8 @@ class SqliteStore {
     }
 
     removeBotSession(address, callback) {
-        return new Promise((fulfill, reject) = > {
-                this.db.run("DELETE from bot_sessions WHERE eth_address = ?", [address], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this.db.run("DELETE from bot_sessions WHERE eth_address = ?", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -321,14 +321,14 @@ class SqliteStore {
             value = value.toString();
         }
 
-        return new Promise((fulfill, reject) = > {
-                this.db.get("SELECT 1 FROM key_value_store WHERE key = ?", [key], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this.db.get("SELECT 1 FROM key_value_store WHERE key = ?", [key], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
                 }
                 else if (result) {
-                    this.db.run("UPDATE key_value_store SET value = ?, type = ? WHERE key = ?", [value, type, key], (err, result) = > {
+                    this.db.run("UPDATE key_value_store SET value = ?, type = ? WHERE key = ?", [value, type, key], (err, result) => {
                         if (err) {
                             console.log(err);
                             reject(err);
@@ -338,7 +338,7 @@ class SqliteStore {
                 })
                     ;
                 } else {
-                    this.db.run("INSERT INTO key_value_store (key, value, type) VALUES (?, ?, ?)", [key, value, type], (err, result) = > {
+                    this.db.run("INSERT INTO key_value_store (key, value, type) VALUES (?, ?, ?)", [key, value, type], (err, result) => {
                     if (err) {
                         console.log(err);
                         reject(err);
@@ -355,8 +355,8 @@ class SqliteStore {
     }
 
     getKey(key) {
-        return new Promise((fulfill, reject) = > {
-                this.db.get("SELECT * FROM key_value_store WHERE key = ?", [key], (err, result) = > {
+        return new Promise((fulfill, reject) => {
+                this.db.get("SELECT * FROM key_value_store WHERE key = ?", [key], (err, result) => {
                 if (err) {
                     console.log(err);
                 }

@@ -95,13 +95,13 @@ class Session {
             fiat_type = 'ether';
         }
         if (fiat_type.toLowerCase() in unit.unitMap) {
-            return getbal.then((bal) = > {
+            return getbal.then((bal) => {
                     return Promise.resolve(unit.fromWei(bal, fiat_type.toLowerCase()));
         })
             ;
         } else {
-            return getbal.then((bal) = > {
-                    return Fiat.fetch().then((fiat) = > {
+            return getbal.then((bal) => {
+                    return Fiat.fetch().then((fiat) => {
                         return Promise.resolve(fiat[fiat_type.toUpperCase()].fromEth(unit.fromWei(bal, 'ether')));
         })
             ;
@@ -129,7 +129,7 @@ class Session {
                 to: this.user.payment_address,
                 value: value
             }
-        }, (session, error, result) = > {
+        }, (session, error, result) => {
             if (result) {
                 session.reply(SOFA.Payment({
                     status: "unconfirmed",
@@ -161,7 +161,7 @@ class Session {
     }
 
     load(onReady) {
-        this.storage.loadBotSession(this.address).then((data) = > {
+        this.storage.loadBotSession(this.address).then((data) => {
             this.data = data;
         if (this.data._thread) {
             this.thread = this.bot.threads[this.data._thread];
@@ -171,12 +171,12 @@ class Session {
         }
         if (this.address != "anonymous") {
             IdService.getUser(this.address)
-                .then((user) = > {
+                .then((user) => {
                 this.user = user;
             onReady();
         })
         .
-            catch((err) = > {
+            catch((err) => {
                 Logger.error("unable to get user details for user: " + this.address)
         })
             ;

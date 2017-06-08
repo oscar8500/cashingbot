@@ -7,7 +7,7 @@ const unit = require('ethjs-unit');
 // this is a hacky way to break that loop
 let Fiat;
 let IdService;
-setTimeout(() = > {
+setTimeout(() => {
     Fiat = require('./Fiat');
 IdService = require('./IdService');
 })
@@ -63,12 +63,12 @@ class Logger {
         if (!sofa) return Logger.error("Tried to send invalid SOFA message");
         // prepare defaults for promise based inputs
         if (typeof user == 'string') {
-            return IdService.getUser(user).then((user) = > {Logger.sentMessage(sofa, user, fiat);
+            return IdService.getUser(user).then((user) => {Logger.sentMessage(sofa, user, fiat);
         })
             ;
         }
         if (sofa.type == 'PaymentRequest' && !fiat) {
-            return Fiat.fetch().then((fiat) = > {Logger.sentMessage(sofa, user, fiat);
+            return Fiat.fetch().then((fiat) => {Logger.sentMessage(sofa, user, fiat);
         })
             ;
         }
@@ -94,7 +94,7 @@ class Logger {
         if (!sofa) return Logger.error("Received invalid SOFA message");
         // prepare defaults for promise based inputs
         if (typeof user == 'string') {
-            return IdService.getUser(user).then((user) = > {Logger.receivedMessage(sofa, user);
+            return IdService.getUser(user).then((user) => {Logger.receivedMessage(sofa, user);
         })
             ;
         }
@@ -114,7 +114,7 @@ class Logger {
 
     static receivedPaymentUpdate(sofa, user, direction) {
         if (typeof user == 'string') {
-            return IdService.getUser(user).then((user) = > {Logger.receivedPaymentUpdate(sofa, user, direction);
+            return IdService.getUser(user).then((user) => {Logger.receivedPaymentUpdate(sofa, user, direction);
         })
             ;
         }
@@ -132,7 +132,7 @@ class Logger {
         }
         let name = formatName(user);
 
-        Fiat.fetch().then((fiat) = > {
+        Fiat.fetch().then((fiat) => {
             Logger.info(Logger.color(icon + '  ', "Payment Update", colour));
         Logger.info(Logger.color(icon + '  ', header + name, colour));
         Logger.info(Logger.color(icon + '  ', "Status:        " + sofa.status, colour));
@@ -143,14 +143,14 @@ class Logger {
     }
 
     static color(prefix, message, color) {
-        let lines = mapLines(message, (x) = > {return color(prefix + x)}
+        let lines = mapLines(message, (x) => {return color(prefix + x)}
     )
         ;
         return lines.join('\n');
     }
 
     static colorPrefix(prefix, message, color, color2) {
-        let lines = mapLines(message, (x) = > {return color(prefix) + color2(x)}
+        let lines = mapLines(message, (x) => {return color(prefix) + color2(x)}
     )
         ;
         return lines.join('\n');

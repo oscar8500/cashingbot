@@ -10,7 +10,7 @@ let cachedAt = 0
 function getRates() {
     Logger.info("Fiat: Fetching rates")
     return rp(endpoint)
-            .then((body) = > {
+            .then((body) => {
             cachedAt = new Date().getTime()
 
             let freshRates = JSON.parse(body).data.rates
@@ -23,7 +23,7 @@ function getRates() {
     return helpers
 })
 .
-    catch((error) = > {
+    catch((error) => {
         Logger.error("Fiat fetch error: " + error)
 })
 }
@@ -60,10 +60,10 @@ function fetch(limit=CACHE_AGE_LIMIT) {
 }
 
 getRates()
-    .then((helper) = > {
+    .then((helper) => {
     Logger.info("Fiat: Rates initialized successfully");
 }).
-catch((err) = > {
+catch((err) => {
     Logger.error(err);
 })
 ;

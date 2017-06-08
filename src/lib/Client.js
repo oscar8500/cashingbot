@@ -48,11 +48,11 @@ class Client {
             console.log("Error " + err);
         });
 
-        this.subscriber.on("message", (channel, message) = > {
+        this.subscriber.on("message", (channel, message) => {
             try {
                 let wrapped = JSON.parse(message);
         if (wrapped.recipient == this.config.tokenIdAddress) {
-            let session = new Session(this.bot, this.store, this.config, wrapped.sender, () = > {
+            let session = new Session(this.bot, this.store, this.config, wrapped.sender, () => {
                     let sofa = SOFA.parse(wrapped.sofa);
             if (sofa.type != 'Payment') {
                 Logger.receivedMessage(sofa, session.user);
@@ -102,13 +102,13 @@ class Client {
         ;
         this.subscriber.subscribe(this.config.tokenIdAddress);
 
-        this.rpcSubscriber.on("message", (channel, message) = > {
+        this.rpcSubscriber.on("message", (channel, message) => {
             try {
                 message = JSON.parse(message);
         if (message.jsonrpc == JSONRPC_VERSION) {
             let stored = this.rpcCalls[message.id];
             delete this.rpcCalls[message.id];
-            let session = new Session(this.bot, this.store, this.config, stored.sessionAddress, () = > {
+            let session = new Session(this.bot, this.store, this.config, stored.sessionAddress, () => {
                     stored.callback(session, message.error, message.result);
         })
             ;
@@ -128,10 +128,10 @@ class Client {
         // note: without this, if the eth service returns notifications before
         // the headless client is ready, the responses generated can be lost
         // in the redis void
-        var interval = setInterval(() = > {
+        var interval = setInterval(() => {
                 this.rpc({address: this.config.tokenIdAddress}, {
                 method: "ping"
-            }, (session, error, result) = > {
+            }, (session, error, result) => {
                 if (result) {
                     clearInterval(interval);
                     Logger.info("Headless client ready...");
@@ -149,8 +149,8 @@ class Client {
 
     configureServices() {
         // eth service monitoring
-        this.store.getKey('lastTransactionTimestamp').then((last_timestamp) = > {
-            this.eth.subscribe(this.config.paymentAddress, (raw_sofa) = > {
+        this.store.getKey('lastTransactionTimestamp').then((last_timestamp) => {
+            this.eth.subscribe(this.config.paymentAddress, (raw_sofa) => {
             let sofa = SOFA.parse(raw_sofa);
         let fut;
         let direction;
@@ -167,14 +167,14 @@ class Client {
             Logger.debug('got payment update for which neither the to or from address match ours!');
             return;
         }
-        fut.then((sender) = > {
+        fut.then((sender) => {
             // TODO: handle null session better?
             if (
         !sender
     )
         sender = {};
         Logger.receivedPaymentUpdate(sofa, sender, direction);
-        let session = new Session(this.bot, this.store, this.config, sender.token_id, () = > {
+        let session = new Session(this.bot, this.store, this.config, sender.token_id, () => {
                 // first check if the session has a valid user (i.e. it's not from an external source)
                 if (session.user.token_id && !session.get('paymentAddress')
     )
@@ -191,7 +191,7 @@ class Client {
     })
         ;
     }).
-        catch((err) = > {
+        catch((err) => {
             console.log(err);
     })
         ;
@@ -202,7 +202,7 @@ class Client {
     )
         ;
     }).
-        catch((err) = > {
+        catch((err) => {
             console.log(err);
     })
         ;

@@ -41,7 +41,7 @@ class Console {
         this.rpcSubscriber = redis.createClient(redisConfig);
         this.publisher = redis.createClient(redisConfig);
 
-        this.subscriber.on("message", (channel, message) = > {
+        this.subscriber.on("message", (channel, message) => {
             try {
                 let wrapped = JSON.parse(message);
         if (wrapped.recipient == this.address) {
@@ -74,7 +74,7 @@ class Console {
 
     run() {
         prompt();
-        this.rl.on('line', (line) = > {
+        this.rl.on('line', (line) => {
             if (line === "/quit"
     )
         {

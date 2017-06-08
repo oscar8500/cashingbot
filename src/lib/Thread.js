@@ -26,7 +26,7 @@ class Thread {
     state(name) {
         if (!this.states.hasOwnProperty(name)) {
             this.states[name] = {
-                    hear: (pattern, cb) = > {
+                    hear: (pattern, cb) => {
                     this.hear(pattern, name, cb);
         }
         }

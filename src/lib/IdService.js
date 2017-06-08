@@ -31,14 +31,14 @@ class IdService {
         return fetch({
                 url: getUrl('/v1/user/' + token_id),
                 json: true
-            }).then((user) = > {
+            }).then((user) => {
                 cached_users[token_id] = {timestamp: new Date().getTime() / 1000, user: user};
         if (user.payment_address) {
             cached_users_pa[user.payment_address] = cached_users_pa[token_id];
         }
         return user;
     }).
-        catch((err) = > {
+        catch((err) => {
             return null;
     })
         ;
@@ -51,7 +51,7 @@ class IdService {
         return fetch({
                 url: getUrl('/v1/search/user?payment_address=' + address),
                 json: true
-            }).then((body) = > {
+            }).then((body) => {
                 cached_users_pa[address] = {timestamp: new Date().getTime() / 1000, user: null};
         let user = null;
         if (body.results.length > 0) {

@@ -185,11 +185,11 @@ class WebsocketClient {
 class EthService {
     static getBalance(address) {
         return rp(getUrl('/v1/balance/' + address))
-                .then((body) = > {
+                .then((body) => {
                 return numberToBN(JSON.parse(body).unconfirmed_balance);
     })
     .
-        catch((error) = > {
+        catch((error) => {
             console.log("Error getting balance for '" + address + "': " + error);
     })
         ;
