@@ -75,7 +75,6 @@ function noPayments(session) {
 }
 
 function welcome(session) {
-
     var wmsj='';
     var nu=parseInt(Math.floor(Math.round(100*(Math.random())))+1);
 
@@ -89,9 +88,7 @@ function welcome(session) {
         wmsj='Carlos';
     }
 
-    sendMessage(session, 'Hello, Im '+wmsj+', I will guide you')
-
-
+    sendMessage(session, 'Hello, I\'m '+wmsj+', I will guide you.')
 }
 
 function pong(session) {
