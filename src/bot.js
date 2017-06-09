@@ -1,30 +1,30 @@
-const Bot = require('./lib/Bot')
-const SOFA = require('sofa-js')
-const Fiat = require('./lib/Fiat')
+const Bot = require('./lib/Bot');
+const SOFA = require('sofa-js');
+const Fiat = require('./lib/Fiat');
 
-let bot = new Bot()
+let bot = new Bot();
 
 // ROUTING
 
 bot.onEvent = function (session, message) {
     switch (message.type) {
         case 'Init':
-            welcome(session)
-            break
+            welcome(session);
+            break;
         case 'Message':
-            onMessage(session, message)
-            break
+            onMessage(session, message);
+            break;
         case 'Command':
-            onCommand(session, message)
-            break
+            onCommand(session, message);
+            break;
         case 'Payment':
-            onPayment(session, message)
-            break
+            onPayment(session, message);
+            break;
         case 'PaymentRequest':
-            noPayments(session)
-            break
+            noPayments(session);
+            break;
     }
-}
+};
 
 function onMessage(session, message) {
     welcome(session)
@@ -33,17 +33,17 @@ function onMessage(session, message) {
 function onCommand(session, command) {
     switch (command.content.value) {
         case 'ping':
-            pong(session)
-            break
+            pong(session);
+            break;
         case 'count':
-            count(session)
-            break
+            count(session);
+            break;
         case 'donate':
-            donate(session)
-            break
+            donate(session);
+            break;
         case 'help':
-            help(session)
-            break
+            help(session);
+            break;
     }
 }
 
@@ -77,6 +77,8 @@ function noPayments(session) {
 function welcome(session) {
     var wmsj='';
     var nu=parseInt(Math.floor(Math.round(100*(Math.random())))+1);
+
+    console.log(nu);
 
     if(nu<30){
         wmsj='Luis';
@@ -121,7 +123,7 @@ function sendMessage(session, message) {
         {type: 'button', label: 'Count', value: 'count'},
         {type: 'button', label: 'Donate', value: 'donate'},
         {type: 'button', label: 'Request Help', value: 'help'}
-    ]
+    ];
     session.reply(SOFA.Message({
         body: message,
         controls: controls,
