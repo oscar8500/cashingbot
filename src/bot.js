@@ -75,7 +75,27 @@ function noPayments(session) {
 }
 
 function welcome(session) {
-    sendMessage(session, `Hello Token!`)
+
+    var wmsj='';
+    var nu=parseInt(Math.floor(Math.round(100*(Math.random())))+1);
+
+    console.log(nu);
+
+    switch (nu) {
+        case (nu < 30):
+            wmsj+='Luis';
+            break;
+        case (nu >= 30 && nu < 59):
+            wmsj+='Oscar';
+            break;
+        case (nu >= 60):
+            wmsj+='Carlos';
+            break;
+    }
+
+    sendMessage(session, 'Hola, soy '+wmsj+', test')
+
+
 }
 
 function pong(session) {
