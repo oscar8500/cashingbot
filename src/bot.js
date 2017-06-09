@@ -78,8 +78,6 @@ function welcome(session) {
     var wmsj='';
     var nu=parseInt(Math.floor(Math.round(100*(Math.random())))+1);
 
-    console.log(nu);
-
     if(nu<30){
         wmsj='Luis';
     }else if(nu>=30&&nu<60){
