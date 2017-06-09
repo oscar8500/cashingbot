@@ -2,13 +2,13 @@ const Config = require('./Config');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const pg = require('pg');
-const url = require('url')
+const url = require('url');
 const unit = require('ethjs-unit');
 const SOFA = require('sofa-js');
-const Fiat = require('./Fiat')
+const Fiat = require('./Fiat');
 const Logger = require('./Logger');
-const EthService = require('./EthService')
-const IdService = require('./IdService')
+const EthService = require('./EthService');
+const IdService = require('./IdService');
 
 class Session {
     constructor(bot, storage, config, address, onReady) {
@@ -49,7 +49,7 @@ class Session {
 
     openThread(name) {
         this.closeThread();
-        this.set('_thread', name)
+        this.set('_thread', name);
         this.thread = this.bot.threads[name];
         this.thread.open(this);
     }
@@ -64,8 +64,8 @@ class Session {
     }
 
     reset() {
-        this.closeThread()
-        this.setState(null)
+        this.closeThread();
+        this.setState(null);
         this.data = {
             address: this.address
         };

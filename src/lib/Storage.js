@@ -4,33 +4,25 @@ const sqlite3 = require('sqlite3');
 
 // Storage Interface
 class StorageInterface {
-    constructor(config) {
-    }
+    constructor(config) {}
 
     // all functions should return a promise
-
     // load's the bot session for the given address
     // session should be passed as the first argument
     // to the callback function provided
-    loadBotSession(address) {
-    }
+    loadBotSession(address) {}
 
     // create a new, or update an existing bot seesion
     // for the given address.
-    updateBotSession(address, data) {
-    }
+    updateBotSession(address, data) {}
 
     // discard the bot session for the given address
-    removeBotSession(address) {
-    }
+    removeBotSession(address) {}
 
     // generic key/value store
-    setKey(key, value) {
-    }
+    setKey(key, value) {}
 
-    getKey(key) {
-    }
-
+    getKey(key) {}
 }
 
 function parse_psql_url(u) {
@@ -62,7 +54,6 @@ function get_type(value) {
 }
 
 class PSQLStore {
-
     constructor(config) {
         if (typeof config === 'object') {
             if (config.url) {
@@ -84,38 +75,30 @@ class PSQLStore {
                 return cb(err)
             }
             client.query(query, args, (err, result) => {
-            done(err);
-        if (err) {
-            return cb(err)
-        }
-        cb(null, result);
-    })
-    })
+                done(err);
+                if (err) {
+                    return cb(err)
+                }
+                cb(null, result);
+            })
+        })
     }
 
 
     loadBotSession(address) {
         return new Promise((fulfill, reject) => {
-                this._execute("SELECT * from bot_sessions WHERE eth_address = $1", [address], (err, result) => {
+            this._execute("SELECT * from bot_sessions WHERE eth_address = $1", [address], (err, result) => {
                 if (err) {
                     console.log(err)
                 }
-                if (
-        !err && result.rows.length > 0
-    )
-        {
-            fulfill(result.rows[0].data);
-        }
-    else
-        {
-            fulfill({
-                address: address
+                if (!err && result.rows.length > 0){
+                    fulfill(result.rows[0].data);
+                }
+                else{
+                    fulfill({address: address});
+                    }
             });
-        }
-    })
-        ;
-    })
-        ;
+        });
     }
 
     updateBotSession(address, data) {
@@ -124,32 +107,27 @@ class PSQLStore {
                  ON CONFLICT (eth_address) DO UPDATE
                  SET data = $2`;
         return new Promise((fulfill, reject) => {
-                this._execute(query, [address, data], (err, result) => {
+            this._execute(query, [address, data], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(erro);
                 }
                 else {fulfill();
-    }
-    })
-        ;
-    })
-        ;
+                }
+            });
+        });
     }
 
     removeBotSession(address) {
         return new Promise((fulfill, reject) => {
-                this._execute("DELETE from bot_sessions WHERE eth_address = $1", [address], (err, result) => {
+            this._execute("DELETE from bot_sessions WHERE eth_address = $1", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(erro);
                 }
-                else {fulfill();
-    }
-    })
-        ;
-    })
-        ;
+                else {fulfill();}
+            });
+        });
     }
 
     setKey(key, value) {
@@ -165,50 +143,41 @@ class PSQLStore {
                  ON CONFLICT (key) DO UPDATE
                  SET value = $2, type = $3`;
         return new Promise((fulfill, reject) => {
-                this._execute(query, [key, value, type], (err, result) => {
+            this._execute(query, [key, value, type], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
                 }
-                else {fulfill();
-    }
-    })
-        ;
-    })
-        ;
+                else {fulfill();}
+            });
+        });
     }
 
     getKey(key) {
         return new Promise((fulfill, reject) => {
-                this._execute("SELECT * FROM key_value_store WHERE key = $1", [key], (err, result) => {
+            this._execute("SELECT * FROM key_value_store WHERE key = $1", [key], (err, result) => {
                 if (err) {
                     console.log(err);
                 }
-                if (result && result.rows.length > 0
-    )
-        {
-            result = result.rows[0];
-            if (result.type == 'json') {
-                fulfill(JSON.parse(result.value));
-            }
-            else if (result.type == 'float') {
-                fulfill(parseFloat(result.value));
-            } else if (result.type == 'int') {
-                fulfill(parseInt(result.value));
-            } else {
-                fulfill(result.value);
-            }
-        }
-    else
-        {
-            fulfill(null);
-        }
-    })
-        ;
-    })
-        ;
+                if (result && result.rows.length > 0){
+                    result = result.rows[0];
+                    if (result.type == 'json') {
+                        fulfill(JSON.parse(result.value));
+                    }
+                    else if (result.type == 'float') {
+                        fulfill(parseFloat(result.value));
+                    } else if (result.type == 'int') {
+                        fulfill(parseInt(result.value));
+                    } else {
+                        fulfill(result.value);
+                    }
+                }
+                else{
+                        fulfill(null);
+                    }
+            });
+        });
     }
-
 }
 
 function parse_sqlite_url(u) {
@@ -224,7 +193,6 @@ function parse_sqlite_url(u) {
 }
 
 class SqliteStore {
-
     constructor(config) {
         if (typeof config === 'object') {
             if (config.url) {
@@ -239,33 +207,25 @@ class SqliteStore {
 
     loadBotSession(address) {
         return new Promise((fulfill, reject) => {
-                this.db.get("SELECT * from bot_sessions WHERE eth_address = ?", [address], (err, result) => {
+            this.db.get("SELECT * from bot_sessions WHERE eth_address = ?", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                 }
-                if (
-        !err && result && result.data
-    )
-        {
-            result = JSON.parse(result.data);
-        }
-    else
-        {
-            result = {
-                address: address
-            };
-        }
-        fulfill(result);
-    })
-        ;
-    })
-        ;
+                if (!err && result && result.data) {
+                    result = JSON.parse(result.data);
+                }
+                else {
+                    result = {address: address};
+                }
+            fulfill(result);
+            });
+        });
     }
 
     updateBotSession(address, data) {
         data = JSON.stringify(data);
         return new Promise((fulfill, reject) => {
-                this.db.get("SELECT 1 FROM bot_sessions WHERE eth_address = ?", [address], (err, result) => {
+            this.db.get("SELECT 1 FROM bot_sessions WHERE eth_address = ?", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -276,41 +236,30 @@ class SqliteStore {
                         if (err) {
                             console.log(err);
                             reject(err);
-                        }
-                        else {fulfill();
-                }
-                })
-                    ;
+                        } else {fulfill();}
+                    });
                 } else {
                     // insert
                     this.db.run("INSERT INTO bot_sessions (eth_address, data) VALUES (?, ?)", [address, data], (err, result) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {fulfill();
-    }
-    })
-        ;
-    }
-    })
-        ;
-    })
-        ;
+                        if (err) {
+                            console.log(err);
+                        }
+                        else {fulfill();}
+                    });
+                }
+            });
+        });
     }
 
     removeBotSession(address, callback) {
         return new Promise((fulfill, reject) => {
-                this.db.run("DELETE from bot_sessions WHERE eth_address = ?", [address], (err, result) => {
+            this.db.run("DELETE from bot_sessions WHERE eth_address = ?", [address], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
-                }
-                else {fulfill();
-    }
-    })
-        ;
-    })
-        ;
+                }else {fulfill();}
+            });
+        });
     }
 
     setKey(key, value) {
@@ -322,7 +271,7 @@ class SqliteStore {
         }
 
         return new Promise((fulfill, reject) => {
-                this.db.get("SELECT 1 FROM key_value_store WHERE key = ?", [key], (err, result) => {
+            this.db.get("SELECT 1 FROM key_value_store WHERE key = ?", [key], (err, result) => {
                 if (err) {
                     console.log(err);
                     reject(err);
@@ -339,24 +288,20 @@ class SqliteStore {
                     ;
                 } else {
                     this.db.run("INSERT INTO key_value_store (key, value, type) VALUES (?, ?, ?)", [key, value, type], (err, result) => {
-                    if (err) {
-                        console.log(err);
-                        reject(err);
-                    }
-                    else {fulfill();
-    }
-    })
-        ;
-    }
-    })
-        ;
-    })
-        ;
+                        if (err) {
+                            console.log(err);
+                            reject(err);
+                        }
+                        else {fulfill();}
+                    });
+                }
+            });
+        });
     }
 
     getKey(key) {
         return new Promise((fulfill, reject) => {
-                this.db.get("SELECT * FROM key_value_store WHERE key = ?", [key], (err, result) => {
+            this.db.get("SELECT * FROM key_value_store WHERE key = ?", [key], (err, result) => {
                 if (err) {
                     console.log(err);
                 }
@@ -371,22 +316,15 @@ class SqliteStore {
                     } else {
                         fulfill(result.value);
                     }
-                } else {
-                    fulfill(null
-    )
-        ;
-    }
-    })
-        ;
-    })
-        ;
+                } else {fulfill(null);}
+            });
+        });
     }
 }
-
 
 module.exports = {
     PSQLStore: PSQLStore,
     SqliteStore: SqliteStore,
     parse_psql_url: parse_psql_url,
     parse_sqlite_url: parse_sqlite_url
-}
+};
