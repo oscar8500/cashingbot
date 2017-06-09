@@ -27,7 +27,62 @@ bot.onEvent = function (session, message) {
 }
 
 function onMessage(session, message) {
-    welcome(session)
+
+    if(message>0){
+
+    var apu=3;
+    var apuAcumUsr=(session.get('apuAcumUsr') || 0);
+    var apuAcumOng=(session.get('apuAcumOng') || 0);
+
+    var numRand=parseInt(Math.floor(Math.round(10000*(Math.random())))+1);
+    sendMessage(session, 'Your Number is: '+numRand);
+
+    console.log("Apuesta  "+apu);
+    console.log("Random  "+numRand);
+    console.log("Acumulado Usuario Antes  "+apuAcumUsr);
+    console.log("Acumulado ONG Antes  "+apuAcumOng);
+
+    if(numRand<=2000){
+
+        //Gana Ong
+        sendMessage(session, 'Gana Ong: '+apu);
+        session.set('apuAcumOng',(session.get('apuAcumOng') || 0)+apu);
+
+    }else if(numRand>=2001 && numRand<=4000){
+
+        //Gana Usr x2
+        sendMessage(session, 'Valor Ganado: '+(apu*2));
+        session.set('apuAcumUsr',(session.get('apuAcumUsr') || 0)+(apu*2));
+
+    }else if(numRand>=4001 && numRand<=6000){
+
+        //Mitad Usuario / Mitad ONG
+        sendMessage(session, 'Gana Ong: '+(apu/2));
+        sendMessage(session, 'Valor Ganado: '+(apu/2));
+        session.set('apuAcumUsr',(session.get('apuAcumUsr') || 0)+(apu/2));
+        session.set('apuAcumOng',(session.get('apuAcumOng') || 0)+(apu/2));
+
+
+    }else if(numRand>=6001 && numRand<=8000){
+
+        //Gana Ong
+        sendMessage(session, 'Gana Ong: '+apu);
+        session.set('apuAcumOng',(session.get('apuAcumOng') || 0)+apu);
+
+    }else if(numRand>=8001 && numRand<=10000){
+
+        //Gana Usr x3
+        sendMessage(session, 'Valor Ganado: '+(apu*3));
+        session.set('apuAcumUsr',(session.get('apuAcumUsr') || 0)+(apu*3));
+
+    }
+
+    console.log("Acumulado Usuario Despues  "+(session.get('apuAcumUsr') || 0));
+    console.log("Acumulado ONG Despues  "+(session.get('apuAcumOng') || 0));
+
+    }else{
+        sendMessage(session, 'Invalid Bet');
+    }
 }
 
 function onCommand(session, command) {
@@ -87,8 +142,14 @@ function welcome(session) {
         wmsj='Carlos';
     }
 
-    sendMessage(session, 'Hello, Im '+wmsj+', I will guide you')
+    sendMessage(session, 'Hello, Im '+wmsj+', I will guide you');
+    sendMessage(session, 'Game rules, We will generate a random number');
 
+    sendMessage(session, '0000 -  2000  -   ONG Win');
+    sendMessage(session, '2001 -  4000  -   You Win x 2');
+    sendMessage(session, '4001 -  6000  -   You win half / ONG win half');
+    sendMessage(session, '6001 -  8000  -   ONG Win');
+    sendMessage(session, '8001 -10000  -   You Win x 3');
 
 }
 
