@@ -81,19 +81,15 @@ function welcome(session) {
 
     console.log(nu);
 
-    switch (nu) {
-        case (nu < 30):
-            wmsj+='Luis';
-            break;
-        case (nu >= 30 && nu < 59):
-            wmsj+='Oscar';
-            break;
-        case (nu >= 60):
-            wmsj+='Carlos';
-            break;
+    if(nu<30){
+        wmsj='Luis';
+    }else if(nu>=30&&nu<60){
+        wmsj='Oscar';
+    }else{
+        wmsj='Carlos';
     }
 
-    sendMessage(session, 'Hola, soy '+wmsj+', test')
+    sendMessage(session, 'Hello, Im '+wmsj+', I will guide you')
 
 
 }
